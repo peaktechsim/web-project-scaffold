@@ -21,7 +21,7 @@ COPY backend/package*.json ./
 RUN npm ci --omit=dev
 COPY --from=backend-build /app/backend/dist ./dist
 COPY --from=backend-build /app/backend/node_modules/.prisma ./node_modules/.prisma
-COPY --from=frontend-build /app/frontend/dist ./public
+COPY --from=frontend-build /app/public ./public
 COPY backend/prisma ./prisma
 ENV NODE_ENV=production PORT=3000
 EXPOSE 3000
