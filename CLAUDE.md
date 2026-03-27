@@ -72,7 +72,27 @@ import { cn } from '@/lib/utils'
 - Prefer shadcn/ui components over custom HTML elements for standard UI patterns
 - Use `cn()` for conditional class merging instead of string concatenation
 - Tests: Jest (backend), lint + build verification
+- CI runs unit tests with coverage and E2E tests against a Postgres service container
 - Git: conventional commits, feature branches from main
+
+## Security
+
+- CORS: reads `CORS_ORIGINS` env var in production; allows all origins in development
+- AllExceptionsFilter: catches all errors, never leaks stack traces in production
+- Docker: runs as non-root `appuser` in production image
+- Health endpoint (`/api/health`): returns DB connectivity status, always HTTP 200
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DATABASE_URL` | `postgresql://app:app@localhost:5432/app_dev` | Postgres connection string |
+| `PORT` | `3000` | Server port |
+| `NODE_ENV` | `development` | Environment |
+| `CORS_ORIGINS` | (none) | Comma-separated allowed origins (required in production) |
+| `POSTGRES_USER` | `app` | Docker Compose DB user |
+| `POSTGRES_PASSWORD` | `app` | Docker Compose DB password |
+| `POSTGRES_DB` | `app_dev` | Docker Compose DB name |
 
 ## Docker Gotchas
 

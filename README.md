@@ -7,7 +7,7 @@ A production-ready, full-stack web application template built for rapid MVP deve
 | Frontend | React + Vite + TailwindCSS + shadcn/ui + React Router + TanStack Query | 19 / 6 / 4 / — / 7 / 5 |
 | Backend | NestJS + Prisma + PostgreSQL | 11 / 6 / 17 |
 | Runtime | Node.js on Alpine Linux | 22 |
-| CI/CD | GitHub Actions | lint + test + build |
+| CI/CD | GitHub Actions | lint + test (coverage) + build + E2E |
 | Output | Single multi-stage Docker image | One container, one port |
 
 ---
@@ -119,12 +119,13 @@ The `depends_on` uses `condition: service_healthy` (not bare `depends_on`) to en
 
 ### CI/CD (`.github/workflows/ci.yml`)
 
-GitHub Actions pipeline triggered on pushes to `main`/`dev` and all PRs:
+GitHub Actions pipeline triggered on pushes to `main`/`dev` and all PRs. Uses `.nvmrc` for Node version pinning.
 
 | Job | Steps |
 |-----|-------|
 | **Frontend** | `npm ci` → `npm run lint` → `npm run build` |
-| **Backend** | `npm ci` → `prisma generate` → `npm run lint` → `npm test` → `npm run build` |
+| **Backend** | `npm ci` → `prisma generate` → `npm run lint` → `npm test` (with coverage) → `npm run build` |
+| **E2E** | Spins up a Postgres service container → `npm ci` → `prisma db push` → runs E2E test suite |
 
 ### CLAUDE.md
 
@@ -174,6 +175,10 @@ cd backend && npm run lint && npm test && npm run build
 | `DATABASE_URL` | `postgresql://app:app@localhost:5432/app_dev` | Postgres connection string |
 | `PORT` | `3000` | Server port |
 | `NODE_ENV` | `development` | Environment (`development` or `production`) |
+| `CORS_ORIGINS` | (none) | Comma-separated allowed origins (required in production) |
+| `POSTGRES_USER` | `app` | Docker Compose DB user |
+| `POSTGRES_PASSWORD` | `app` | Docker Compose DB password |
+| `POSTGRES_DB` | `app_dev` | Docker Compose DB name |
 
 Copy `.env.example` to `.env` and adjust as needed.
 
@@ -308,6 +313,15 @@ web-project-scaffold/
 ├── .env.example                    # Environment variable template
 └── .gitignore
 ```
+
+---
+
+## Security
+
+- Non-root Docker user (`appuser`)
+- CORS origin restriction in production
+- Global exception filter (no stack trace leaks)
+- Input validation via NestJS ValidationPipe
 
 ---
 
