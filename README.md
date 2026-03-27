@@ -4,7 +4,7 @@ A production-ready, full-stack web application template built for rapid MVP deve
 
 | Layer | Technology | Version |
 |-------|-----------|---------|
-| Frontend | React + Vite + TailwindCSS + React Router + TanStack Query | 19 / 6 / 4 / 7 / 5 |
+| Frontend | React + Vite + TailwindCSS + shadcn/ui + React Router + TanStack Query | 19 / 6 / 4 / — / 7 / 5 |
 | Backend | NestJS + Prisma + PostgreSQL | 11 / 6 / 17 |
 | Runtime | Node.js on Alpine Linux | 22 |
 | CI/CD | GitHub Actions | lint + test + build |
@@ -60,9 +60,35 @@ A React 19 single-page application with modern tooling:
 | **API Client** | `src/lib/api.ts` | Typed fetch wrapper with `get<T>`, `post<T>`, `patch<T>`, `del` helpers. Custom `ApiError` class. Includes `fetchHealth()` example. |
 | **Health Hook** | `src/hooks/useHealth.ts` | TanStack Query hook demonstrating the data-fetching pattern. Polls `/api/health` every 30s. |
 
+#### UI Components (shadcn/ui)
+
+The frontend includes [shadcn/ui](https://ui.shadcn.com) — accessible, customizable components built on Radix UI and Tailwind CSS. Pre-installed components:
+
+| Component | Import | Purpose |
+|-----------|--------|---------|
+| Button | `@/components/ui/button` | Actions and form submissions |
+| Card | `@/components/ui/card` | Content containers with header/body/footer |
+| Input | `@/components/ui/input` | Text input fields |
+| Label | `@/components/ui/label` | Form field labels |
+| Dialog | `@/components/ui/dialog` | Modal dialogs and confirmations |
+| DropdownMenu | `@/components/ui/dropdown-menu` | Contextual menus |
+| Toast | `@/components/ui/toast` | Notifications and feedback |
+| Badge | `@/components/ui/badge` | Status indicators and labels |
+| Separator | `@/components/ui/separator` | Visual dividers |
+| Skeleton | `@/components/ui/skeleton` | Loading placeholders |
+
+Add more components from the [shadcn/ui registry](https://ui.shadcn.com/docs/components):
+
+```bash
+cd frontend
+npx shadcn@latest add [component-name]
+```
+
 **Key conventions:**
 - Pages in `src/pages/`, hooks in `src/hooks/`, shared components in `src/components/`
+- All imports use the `@/` path alias (e.g. `import { Button } from '@/components/ui/button'`)
 - TailwindCSS utility classes only (no custom CSS, no inline styles)
+- Use `cn()` from `@/lib/utils` for conditional class merging
 - Vite dev server proxies `/api` requests to the backend at `localhost:3000`
 - Build output goes to `../public` (served by NestJS in production)
 
@@ -211,7 +237,18 @@ frontend/src/
 
 Add routes in `App.tsx`.
 
-### 5. Update project files
+### 5. Customize UI components
+
+The included shadcn/ui components are a starting point. Add more as needed:
+
+```bash
+cd frontend
+npx shadcn@latest add table tabs form select textarea
+```
+
+Customize the theme by editing `frontend/src/index.css` (CSS variables) and `frontend/components.json`.
+
+### 6. Update project files
 
 - `CLAUDE.md` — Replace "Web Project Scaffold" with your venture name, add your specific coding standards
 - `README.md` — Describe your app
@@ -251,9 +288,10 @@ web-project-scaffold/
 │   │   ├── App.tsx                 # Route definitions
 │   │   ├── index.css               # TailwindCSS imports + theme
 │   │   ├── components/
-│   │   │   └── ErrorBoundary.tsx   # Render error catcher
+│   │   │   ├── ErrorBoundary.tsx   # Render error catcher
+│   │   │   └── ui/                 # shadcn/ui components (button, card, badge, etc.)
 │   │   ├── pages/
-│   │   │   └── DashboardPage.tsx   # Placeholder dashboard
+│   │   │   └── DashboardPage.tsx   # Dashboard with shadcn/ui components
 │   │   ├── hooks/
 │   │   │   └── useHealth.ts        # Health check hook (TanStack Query)
 │   │   └── lib/

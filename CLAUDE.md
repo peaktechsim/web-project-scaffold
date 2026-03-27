@@ -29,12 +29,48 @@ Single Docker image (NestJS serves React SPA)
 └── .github/workflows/    # CI pipeline
 ```
 
+## UI Components (shadcn/ui)
+
+The frontend uses [shadcn/ui](https://ui.shadcn.com) — a collection of accessible, customizable components built on Radix UI and Tailwind CSS.
+
+### Available Components
+
+button, card, input, label, dialog, dropdown-menu, toast, badge, separator, skeleton
+
+### Adding New Components
+
+```bash
+cd frontend
+npx shadcn@latest add [component]
+```
+
+### Import Pattern
+
+```tsx
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+```
+
+### The `cn()` Utility
+
+Use `cn()` from `@/lib/utils` to merge Tailwind classes conditionally:
+
+```tsx
+import { cn } from '@/lib/utils'
+
+<div className={cn('base-classes', isActive && 'active-classes')} />
+```
+
 ## Coding Standards
 
 - TypeScript strict mode, no `any` types
 - One NestJS module per entity: module + controller + service + dto + spec
 - Use `class-validator` for DTOs
-- Frontend: pages in `src/pages/`, hooks in `src/hooks/`, shadcn/ui components
+- Frontend: pages in `src/pages/`, hooks in `src/hooks/`, UI via shadcn/ui components
+- All frontend imports use the `@/` path alias (e.g. `@/components/ui/button`, `@/hooks/useHealth`)
+- Prefer shadcn/ui components over custom HTML elements for standard UI patterns
+- Use `cn()` for conditional class merging instead of string concatenation
 - Tests: Jest (backend), lint + build verification
 - Git: conventional commits, feature branches from main
 
