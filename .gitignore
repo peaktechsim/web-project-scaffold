@@ -29,6 +29,12 @@ Thumbs.db
 # Test coverage
 coverage/
 
+# Lint cache
+.eslintcache
+
+# Vite cache
+.vite/
+
 # Prisma
 *.db
 *.db-journal

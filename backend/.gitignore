@@ -1,2 +1,21 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+
+# Environment
+.env
+.env.*
+
+# Test coverage
+coverage/
+
+# Lint cache
+.eslintcache
+
+# Logs
+*.log
+
+# OS
+.DS_Store
