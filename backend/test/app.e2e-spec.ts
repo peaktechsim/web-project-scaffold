@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { HttpExceptionFilter } from '../src/filters/http-exception.filter';
+import { AllExceptionsFilter } from '../src/filters/all-exceptions.filter';
+import { PrismaService } from '../src/config/prisma.service';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -10,11 +11,18 @@ describe('AppController (e2e)', () => {
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue({
+        $connect: () => Promise.resolve(),
+        $disconnect: () => Promise.resolve(),
+        $queryRawUnsafe: () => Promise.resolve([{ '?column?': 1 }]),
+      })
+      .compile();
 
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-    app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalFilters(new AllExceptionsFilter());
     await app.init();
   });
 
@@ -36,6 +44,7 @@ describe('AppController (e2e)', () => {
       .expect((res: request.Response) => {
         expect(res.body.status).toBe('ok');
         expect(res.body.timestamp).toBeDefined();
+        expect(res.body.database).toBe('connected');
       });
   });
 });
