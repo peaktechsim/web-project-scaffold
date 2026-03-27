@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// Example user model — replace with your domain entities.
+/// Demonstrates Prisma conventions used in this scaffold:
+///   - UUID primary keys (@id @default(uuid()))
+///   - snake_case column mapping via @map
+///   - Automatic timestamps (createdAt, updatedAt)
+///   - Table name mapping via @@map
 model User {
   id        String   @id @default(uuid())
   email     String   @unique @map("email")
