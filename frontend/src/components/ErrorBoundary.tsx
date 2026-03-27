@@ -1,4 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Props {
   children: ReactNode;
@@ -26,21 +28,23 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex min-h-screen items-center justify-center bg-surface-alt">
-          <div className="mx-auto max-w-md rounded-lg bg-surface p-8 shadow-lg">
-            <h1 className="mb-2 text-xl font-semibold text-brand-900">
-              Something went wrong
-            </h1>
-            <p className="mb-4 text-sm text-brand-600">
-              {this.state.error?.message ?? 'An unexpected error occurred.'}
-            </p>
-            <button
-              onClick={() => this.setState({ hasError: false, error: null })}
-              className="rounded-md bg-brand-800 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 transition-colors"
-            >
-              Try again
-            </button>
-          </div>
+        <div className="flex min-h-screen items-center justify-center bg-background p-4">
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>Something went wrong</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                {this.state.error?.message ?? 'An unexpected error occurred.'}
+              </p>
+              <Button
+                size="sm"
+                onClick={() => this.setState({ hasError: false, error: null })}
+              >
+                Try again
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       );
     }
