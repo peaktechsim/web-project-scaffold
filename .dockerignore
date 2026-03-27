@@ -1,0 +1,17 @@
+.git
+.github
+node_modules
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+**/coverage
+*.md
+.gitignore
+.dockerignore
+.vscode
+.idea
+**/*.log
+.DS_Store
+.nvmrc
+.prettierrc
